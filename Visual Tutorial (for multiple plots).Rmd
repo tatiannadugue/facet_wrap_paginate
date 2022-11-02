@@ -1,0 +1,184 @@
+---
+title: "Visual tutorial (for multiple plots)"
+author: "Tatianna Dugue"
+date: "2022-07-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+######################################HELLO!!#################################
+This is a tutorial on how to break up the plots you make for your data in a more readable way using facet_wrap_paginate. This function puts your many plots into a grid of your preferred dimension and places them on individual pages. So instead of having a 100 tiny squished scatterplots for every person/country/etc in your dataset, you will be able to look at them on a matrix of 5 x 4 or whatever you prefer across 5 pages instead of one. The data is from a study I was on studying economic inequality and cognitive biases, you find the osf here: https://osf.io/njd62/. Okay! Let's get into it!
+
+#install & load packages
+```{r}
+#if you don't already have these packages downloaded on your computer then download it now so that the functions we will be using can work in R
+
+install.packages("ggplot2")
+          #this is for making plots
+
+install.packages("ggforce")
+          #this is a more intense version of ggplot haha, it has more functions including facet_wrap_paginate which we'll be using to separate out our plots across pages
+
+install.packages("readr")
+          #this will just let us read in the file 
+
+#load in packages now that you have them installed
+library(ggplot2)
+library(ggforce)
+library(readr)
+
+
+```
+
+
+#load in your data set you want to visualize
+```{r}
+#this is the dataframe we'll be working with 
+dataframe <- read_csv("1_5_dat_transform.csv")
+
+#you may need to set up your working directory for R to know where to find this csv. Do this with the getwd() & setwd() functions or hit Session on the top panel and scroll down to "Choose Directory"
+                      #The Hot key for this is: Ctr + Shift +H
+```
+
+#The Before
+```{r}
+#let's first look at the visualization when it doesn't use facet_wrap_paginate to illustrate why we might want to separate our plots out to be more      readable
+
+messyplot <- ggplot(dataframe, aes(x = income, y = score, color = pdev))+
+  geom_boxplot()+
+  facet_wrap(~Residence)
+
+messyplot #this just prints out the plot as the above code just assigned the plot we made to a name "messyplot" 
+
+#SCAFFOLDING CODE IS HERE: 
+#nameofplot <- ggplot(yourdf, aes(x = your independent variable, y = your dependent variable/what is being affected, color = the groups you want to distinguish)) +
+  #geom_whicheverplot_youwant()+
+  #facet_wrap(~The level you want to separate your variables across)
+      
+
+```
+
+#The After :)
+#making the cleaner visualization (aka the plot)        
+```{r}
+#as you can see above, the x and y-axes are smushed, we can't reasonably make a difference between Turkey and Slovenia. Bosnia and Herzegovina's name is cut off... it's a mess.
+#So let's clean it up! Using facet_wrap_paginate this can fixed up
+                            #this function shows by page, so you have to write                              out the page number for every page
+
+plot_page1 <- ggplot(dataframe, aes(x = income, y = score, color = pdev))+
+  geom_boxplot()+
+  facet_wrap_paginate(~Residence, nrow = 3, ncol = 3, page = 1) +
+  #facet_wrap_paginate function allows you to separate
+  theme(axis.text.x = element_text(angle=90, vjust = .5, hjust = 1))
+        #(OPTIONAL) this just makes the x axis labels vertical instead of                horizontal for readability 
+                            
+plot_page1
+
+#SCAFFOLDING CODE- add this to the scaffold found above and replace facet_wrap with facet_wrap_paginate:
+
+  #facet_wrap_paginate(~the_level_you_want_to_present, nrow = the_number_of plots_you_want_shown_in_rows, ncol = the_same_thing_but_for_the_columns, page = the_particular_page_you_want_R_to_show_you)
+```
+
+#More pages
+```{r}
+#Nice! Now we have the page 1 of that original visualization with only 9 countries instead of EVERY single country (~60)
+#let's make the rest of the pages so we can see all of them together. You can do this with a for loop (see below in header: MORE ADVANCED WAY) but in this example it will just be copy & paste
+
+#PAGE 2
+plot_page2 <- ggplot(dataframe, aes(x = income, y = score, color = pdev))+
+  geom_boxplot()+
+  facet_wrap_paginate(~Residence, nrow = 3, ncol = 3, page = 2) +
+                              #all you do is change "page =" to the next page
+  theme(axis.text.x = element_text(angle=90, vjust = .5, hjust = 1))
+       
+                            
+plot_page2
+
+#PAGE 3
+plot2_page3 <- ggplot(dataframe, aes(x = income, y = score, color = pdev))+
+  geom_boxplot()+
+  facet_wrap_paginate(~Residence, nrow = 3, ncol = 3, page = 3) +
+                              #all you do is change "page =" to the next page
+  theme(axis.text.x = element_text(angle=90, vjust = .5, hjust = 1))
+       
+                            
+plot_page3
+
+#PAGE 4
+plot2_page4 <- ggplot(dataframe, aes(x = income, y = score, color = pdev))+
+  geom_boxplot()+
+  facet_wrap_paginate(~Residence, nrow = 3, ncol = 3, page = 4) +
+  theme(axis.text.x = element_text(angle=90, vjust = .5, hjust = 1))
+       
+                            
+plot_page4
+
+#PAGE 5
+plot_page5 <- ggplot(dataframe, aes(x = income, y = score, color = pdev))+
+  geom_boxplot()+
+  facet_wrap_paginate(~Residence, nrow = 3, ncol = 3, page = 5) +
+  theme(axis.text.x = element_text(angle=90, vjust = .5, hjust = 1))
+       
+                            
+plot_page5
+
+#PAGE 6
+plot_page6 <- ggplot(dataframe, aes(x = income, y = score, color = pdev))+
+  geom_boxplot()+
+  facet_wrap_paginate(~Residence, nrow = 3, ncol = 3, page = 6) +
+  theme(axis.text.x = element_text(angle=90, vjust = .5, hjust = 1))
+       
+                            
+plot_page6
+
+#PAGE 7
+plot_page7 <- ggplot(dataframe, aes(x = income, y = score, color = pdev))+
+  geom_boxplot()+
+  facet_wrap_paginate(~Residence, nrow = 3, ncol = 3, page = 7) +
+  theme(axis.text.x = element_text(angle=90, vjust = .5, hjust = 1))
+       
+                            
+plot_page7
+
+#IMPORTANT TO NOTE: facet_wrap_paginate might not show you the remaining plots needed to be plotted if it does not fit in the matrix you specify. AKA it will only show you 3 plots across and 3 plots below, so if you have 1 extra country you want presented you would not use facet_wrap_paginate to present it most likely or you would just change the nrow & ncol to be 1 instead of your original matrix. 
+          #TLDR; Always double check to see if all of your data has been                 visualized as facet_wrap_paginate may not visualize one off plots              that don't fit in your specified matrix
+
+```
+#save your plots
+```{r}
+#now that you have done the hard work and have all your plots, save them!
+#you'll have to do the copy and pasting method or run a for loop (look below in header: MORE ADVANCED WAY to do so)
+ggsave("plot_page1.pdf", dpi = 300, width = 5, height =5)
+ggsave("plot_page2.pdf", dpi = 300, width = 5, height =5)
+ggsave("plot_page3.pdf", dpi = 300, width = 5, height =5)
+ggsave("plot_page4.pdf", dpi = 300, width = 5, height =5)
+ggsave("plot_page5.pdf", dpi = 300, width = 5, height =5)
+ggsave("plot_page6.pdf", dpi = 300, width = 5, height =5)
+ggsave("plot_page7.pdf", dpi = 300, width = 5, height =5)
+        #you can also save it as a .jpg, .png
+
+    #sadly this will make each plot into its own pdf, if you want them all one pdf use the for loop below. But this works best imo when you want to save the plots as images
+```
+
+#MORE ADVANCED WAY:if you want to do it as a for loop
+```{r}
+#this for loop makes the different pages (1-6) as well as saves the pages all in one pdf
+
+pdf("~/plots_all.pdf")
+for(i in 1:7){
+  ggplot(dataframe, aes(x = income, y = score, color = pdev)) +
+    geom_boxplot() +
+    facet_wrap_paginate(~Residence, ncol = 3, nrow = 3, page = i)
+
+  ggsave(paste0("~/plotpage_", i, ".pdf")) #this tells R to save each created plot as "plotpage_number.pdf" or i in this sense
+}   
+dev.off
+#this turns off PDF plotting
+   
+
+#this for loop tiny tutorial is based off of these wonderful people at stack overflow: https://stackoverflow.com/questions/48544039/how-to-save-output-from-ggforcefacet-grid-paginate-in-only-one-pdf  (check it out for more explanation)
+
+```
+
